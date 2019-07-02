@@ -1044,14 +1044,14 @@ public class Socket: SocketReader, SocketWriter {
 	///
 	/// - Returns: New Socket instance
 	///
-	public class func create(fromNativeHandle nativeHandle: Int32, address: Address?) throws -> Socket {
+	public class func create(fromNativeHandle nativeHandle: Int32, address: Address?, connected: Bool = true, listening: Bool = false) throws -> Socket {
 
 		guard let addr = address else {
 
 			throw Error(code: Socket.SOCKET_ERR_MISSING_CONNECTION_DATA, reason: "Unable to access socket connection data.")
 		}
 
-		return try Socket(fd: nativeHandle, remoteAddress: addr)
+		return try Socket(fd: nativeHandle, remoteAddress: addr, connected: connected, listening: listening)
 	}
 
 	///
@@ -1327,10 +1327,10 @@ public class Socket: SocketReader, SocketWriter {
 	///
 	/// - Returns: New Socket instance
 	///
-	private init(fd: Int32, remoteAddress: Address, path: String? = nil) throws {
+	private init(fd: Int32, remoteAddress: Address, path: String? = nil, connected: Bool = true, listening: Bool = false) throws {
 
-		self.isConnected = true
-		self.isListening = false
+		self.isConnected = connected
+		self.isListening = listening
 		#if swift(>=4.1)
 			self.readBuffer.initialize(to: 0)
 		#else
