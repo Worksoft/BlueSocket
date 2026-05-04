@@ -1,7 +1,7 @@
 // swift-tools-version:5.0
 
 /**
- * Copyright IBM Corporation 2017-2019
+ * Copyright IBM Corporation and the Kitura project authors 2017-2020
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,17 +25,24 @@ let package = Package(
         .library(
             name: "Socket",
             targets: ["Socket"]),
+        .library(
+            name: "BlueSocketTestCommonLibrary",
+            targets: ["BlueSocketTestCommonLibrary"]),
     ],
     dependencies: [],
     targets: [
         .target(
             name: "Socket",
             dependencies: [],
-            exclude: ["BlueSocket.xcodeproj", "BlueSocket.xcworkspace", "README.md", "Sources/Info.plist", "Sources/Socket.h"]
+            exclude: ["Info.plist", "Socket.h"]
         ),
         .testTarget(
             name: "SocketTests",
-            dependencies: ["Socket"]
+            dependencies: ["Socket", "BlueSocketTestCommonLibrary"]
+        ),
+        .target(
+            name: "BlueSocketTestCommonLibrary",
+            dependencies: [ "Socket" ]
         ),
     ]
 )
